@@ -1,4 +1,4 @@
 Surf
 ====
 
-Surf deployment for sfi.ru
+Surf deployment for our projects
