@@ -1,5 +1,5 @@
 {
-	"name": "typo3/surf",
+	"name": "sfi/surf",
 	"description": "Surf script for our deployments",
 	"license": "LGPL-3.0+",
 	"config": {
