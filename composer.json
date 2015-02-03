@@ -1,22 +1,14 @@
 {
-	"name": "typo3/flow-base-distribution",
-	"description": "Flow installation to run Surf",
+	"name": "typo3/surf",
+	"description": "Surf script for our deployments",
 	"license": "LGPL-3.0+",
 	"config": {
 		"vendor-dir": "Packages/Libraries",
 		"bin-dir": "bin"
 	},
 	"require": {
-		"typo3/flow": "2.2.*",
-		"typo3/welcome": "2.2.*",
 		"doctrine/migrations": "@dev",
 		"typo3/surf": "dev-master"
-	},
-	"require-dev": {
-		"typo3/kickstart": "2.2.*",
-		"typo3/buildessentials": "2.2.*",
-		"phpunit/phpunit": "4.0.*",
-		"mikey179/vfsstream": "1.2.*"
 	},
 	"suggest": {
 		"ext-pdo_sqlite": "For running functional tests out-of-the-box this is required"
