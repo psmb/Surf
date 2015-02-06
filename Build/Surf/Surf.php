@@ -28,7 +28,7 @@ $application->setOption('keepReleases', 10);
 $application->setOption('transferMethod', 'rsync');
 $application->setOption('packageMethod', 'git');
 $application->setOption('updateMethod', NULL);
-$application->setOption('rsyncFlags', "--recursive --omit-dir-times --perms --links --delete --delete-excluded --exclude '.git'");
+$application->setOption('rsyncFlags', "--recursive --omit-dir-times --no-perms --links --delete --delete-excluded --exclude '.git'");
 
 
 $workflow = new \TYPO3\Surf\Domain\Model\SimpleWorkflow();
