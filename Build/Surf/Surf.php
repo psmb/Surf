@@ -38,7 +38,7 @@ $workflow->defineTask('sfi.sfi:beard',
 );
 $workflow->defineTask('sfi.sfi:initialize',
         'typo3.surf:shell',
-        array('command' => 'cd {releasePath} && cp Configuration/Production/Settings.yaml Configuration/Settings.yaml && FLOW_CONTEXT=Production ./flow flow:cache:flush --force && chmod g+rwx -R . && umask 007 && FLOW_CONTEXT=Production ./flow cache:warmup')
+        array('command' => 'cd {releasePath} && cp Configuration/Production/Settings.yaml Configuration/Settings.yaml && sudo rm Data/Temporary/Production && ln -s /mnt/db/fast/sfi.ru/DataTemporaryProduction Data/Temporary/Production && FLOW_CONTEXT=Production ./flow flow:cache:flush --force && chmod g+rwx -R . && umask 007 && FLOW_CONTEXT=Production ./flow cache:warmup')
 );
 $smokeTestOptions = array(
         'url' => 'http://next.'.$envVars['DOMAIN'],
