@@ -35,7 +35,7 @@ $workflow = new \TYPO3\Surf\Domain\Model\SimpleWorkflow();
 
 $workflow->defineTask('sfi.sfi:nogit',
         'typo3.surf:localshell',
-        array('command' => 'cd {workspacePath} && git config --global url."http://git.typo3.org".insteadOf git://git.typo3.org')
+        array('command' => 'git config --global url."http://git.typo3.org".insteadOf git://git.typo3.org')
 );
 $workflow->defineTask('sfi.sfi:beard',
         'typo3.surf:localshell',
