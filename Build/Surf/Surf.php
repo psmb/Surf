@@ -32,6 +32,11 @@ $application->setOption('rsyncFlags', "--recursive --omit-dir-times --no-perms -
 
 
 $workflow = new \TYPO3\Surf\Domain\Model\SimpleWorkflow();
+
+$workflow->defineTask('sfi.sfi:nogit',
+        'typo3.surf:localshell',
+        array('command' => 'cd {workspacePath} && git config --global url."http://git.typo3.org".insteadOf git://git.typo3.org')
+);
 $workflow->defineTask('sfi.sfi:beard',
         'typo3.surf:localshell',
         array('command' => 'cd {workspacePath} && git config --global user.email "dimaip@gmail.com" &&  git config --global user.name "Dmitri Pisarev (CircleCI)" && ./beard patch')
@@ -47,6 +52,7 @@ $smokeTestOptions = array(
         'expectedRegexp' => '/Page--Main/'
 );
 $workflow->defineTask('sfi.sfi:smoketest', 'typo3.surf:test:httptest', $smokeTestOptions);
+$workflow->beforeStage('package', 'sfi.sfi:nogit', $application);
 $workflow->beforeStage('transfer', 'sfi.sfi:beard', $application);
 $workflow->addTask('sfi.sfi:initialize', 'migrate', $application);
 $workflow->addTask('sfi.sfi:smoketest', 'test', $application);
