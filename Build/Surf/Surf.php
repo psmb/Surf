@@ -19,7 +19,7 @@ if(getenv("DOMAIN") == "") {
 
 
 $application = new \TYPO3\Surf\Application\TYPO3\Flow($envVars['DOMAIN']);
-$application->setDeploymentPath('/www/'.$envVars['DOMAIN'].'/surf');
+$application->setDeploymentPath('/home/dimaip/docker/'.$envVars['DOMAIN'].'/data/www/'.$envVars['DOMAIN'].'/surf');
 $application->setOption('repositoryUrl', $envVars['REPOSITORY_URL']);
 $application->setOption('composerCommandPath', '/usr/local/bin/composer');
 $application->setOption('keepReleases', 10);
