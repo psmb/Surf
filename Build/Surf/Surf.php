@@ -19,7 +19,7 @@ if(getenv("DOMAIN") == "") {
 
 
 $application = new \TYPO3\Surf\Application\TYPO3\Flow($envVars['DOMAIN']);
-$application->setDeploymentPath('/home/dimaip/docker/'.$envVars['DOMAIN'].'/data/www/'.$envVars['DOMAIN'].'/surf');
+$application->setDeploymentPath('/data/www/'.$envVars['DOMAIN'].'/surf');
 $application->setOption('repositoryUrl', $envVars['REPOSITORY_URL']);
 $application->setOption('composerCommandPath', '/usr/local/bin/composer');
 $application->setOption('keepReleases', 10);
@@ -61,7 +61,8 @@ $workflow->setEnableRollback(FALSE);
 
 $node = new \TYPO3\Surf\Domain\Model\Node($envVars['DOMAIN']);
 $node->setHostname('server.psmb.ru');
-$node->setOption('username', 'dimaip');
+$node->setOption('username', 'www');
+$node->setOption('port', $envVars['PORT']);
 $application->addNode($node);
 
 
