@@ -17,6 +17,12 @@ if(getenv("DOMAIN") == "") {
 	$envVars['DOMAIN'] = getenv("DOMAIN");
 }
 
+if(getenv("PORT") == "") {
+	throw new \TYPO3\Surf\Exception\InvalidConfigurationException("EnvVar PORT is not set!");
+} else {
+	$envVars['PORT'] = getenv("PORT");
+}
+
 
 $application = new \TYPO3\Surf\Application\TYPO3\Flow($envVars['DOMAIN']);
 $application->setDeploymentPath('/data/www/'.$envVars['DOMAIN'].'/surf');
