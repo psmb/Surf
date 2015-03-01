@@ -51,6 +51,10 @@ $workflow->defineTask('sfi.sfi:initialize',
         'typo3.surf:shell',
         array('command' => 'cd {releasePath} && cp Configuration/Production/Settings.yaml Configuration/Settings.yaml && FLOW_CONTEXT=Production ./flow flow:cache:flush --force && chmod g+rwx -R .')
 );
+$workflow->defineTask('sfi.sfi:clearopcache',
+        'typo3.surf:shell',
+        array('command' => 'cd {releasePath}/Web && echo "<?php opcache_reset(); ?>" > cc.php && curl "http://next.sfi.ru/cc.php" && rm cc.php')
+);
 $smokeTestOptions = array(
         'url' => 'http://next.'.$envVars['DOMAIN'],
         'remote' => TRUE,
@@ -58,9 +62,11 @@ $smokeTestOptions = array(
         'expectedRegexp' => '/Page--Main/'
 );
 $workflow->defineTask('sfi.sfi:smoketest', 'typo3.surf:test:httptest', $smokeTestOptions);
+
 $workflow->beforeStage('package', 'sfi.sfi:nogit', $application);
 $workflow->beforeStage('transfer', 'sfi.sfi:beard', $application);
 $workflow->addTask('sfi.sfi:initialize', 'migrate', $application);
+$workflow->addTask('sfi.sfi:clearopcache', 'test', $application);
 $workflow->addTask('sfi.sfi:smoketest', 'test', $application);
 $workflow->setEnableRollback(FALSE);
 
