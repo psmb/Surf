@@ -53,7 +53,7 @@ $workflow->defineTask('sfi.sfi:initialize',
 );
 $workflow->defineTask('sfi.sfi:clearopcache',
         'typo3.surf:shell',
-        array('command' => 'cd {currentPath}/Web && echo "<?php opcache_reset();" > cc.php && curl "http://" . $envVars['DOMAIN'] . "/cc.php" && rm cc.php')
+        array('command' => 'cd {currentPath}/Web && echo "<?php opcache_reset();" > cc.php && curl "http://' . $envVars['DOMAIN'] . '/cc.php" && rm cc.php')
 );
 $smokeTestOptions = array(
         'url' => 'http://next.'.$envVars['DOMAIN'],
