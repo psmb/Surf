@@ -53,12 +53,12 @@ $workflow->defineTask('sfi.sfi:beard',
 // TODO: move this stuff to build.sh
 $workflow->defineTask('sfi.sfi:initialize',
         'typo3.surf:shell',
-        array('command' => 'cd {releasePath} && cp Configuration/Production/Settings.yaml Configuration/Settings.yaml && FLOW_CONTEXT=Production ./flow flow:cache:flush --force && chmod g+rwx -R .')
+        array('command' => 'cd {releasePath} && cp Configuration/Production/Settings.yaml Configuration/Settings.yaml && chmod g+rwx -R .')
 );
 // Clearing opcode cache. More info here: http://codinghobo.com/opcache-and-symlink-based-deployments/
 $workflow->defineTask('sfi.sfi:clearopcache',
         'typo3.surf:shell',
-        array('command' => 'cd {currentPath}/Web && echo "<?php opcache_reset();" > cc.php && curl "http://' . $envVars['DOMAIN'] . '/cc.php" && rm cc.php')
+        array('command' => 'cd {currentPath}/Web && echo "<?php opcache_reset();" > cc.php && curl "http://' . $envVars['DOMAIN'] . '/cc.php" && rm cc.php && FLOW_CONTEXT=Production ./flow flow:cache:flush --force && FLOW_CONTEXT=Production ./flow flow:cache:warmup')
 );
 // Simple smoke test
 $smokeTestOptions = array(
