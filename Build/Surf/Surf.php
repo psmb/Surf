@@ -58,7 +58,7 @@ $workflow->defineTask('sfi.sfi:initialize',
 // Clearing opcode cache. More info here: http://codinghobo.com/opcache-and-symlink-based-deployments/
 $workflow->defineTask('sfi.sfi:clearopcache',
         'typo3.surf:shell',
-        array('command' => 'cd {currentPath}/Web && echo "<?php opcache_reset(); echo \"cache cleared\";" > cc.php && curl "http://' . $envVars['DOMAIN'] . '/cc.php" rm cc.php && cd {releasePath} && FLOW_CONTEXT=Production ./flow flow:cache:flush --force && FLOW_CONTEXT=Production ./flow flow:cache:warmup')
+        array('command' => 'cd {currentPath}/Web && echo "<?php opcache_reset(); echo \"cache cleared\";" > cc.php && curl "http://' . $envVars['DOMAIN'] . '/cc.php"; && rm cc.php && cd {releasePath} && FLOW_CONTEXT=Production ./flow flow:cache:flush --force && FLOW_CONTEXT=Production ./flow flow:cache:warmup')
 );
 // Simple smoke test
 $smokeTestOptions = array(
