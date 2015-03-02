@@ -3,20 +3,21 @@ use TYPO3\Surf\Domain\Model\Workflow;
 use TYPO3\Surf\Domain\Model\Node;
 use TYPO3\Surf\Domain\Model\SimpleWorkflow;
 
-
-
+// Distribution repository url
 if(getenv("REPOSITORY_URL") == "") {
 	throw new \TYPO3\Surf\Exception\InvalidConfigurationException("EnvVar REPOSITORY_URL is not set!");
 } else {
 	$envVars['REPOSITORY_URL'] = getenv("REPOSITORY_URL");
 }
 
+// Domain name, used in various places
 if(getenv("DOMAIN") == "") {
 	throw new \TYPO3\Surf\Exception\InvalidConfigurationException("EnvVar DOMAIN is not set!");
 } else {
 	$envVars['DOMAIN'] = getenv("DOMAIN");
 }
 
+// Ssh port of docker image
 if(getenv("PORT") == "") {
 	throw new \TYPO3\Surf\Exception\InvalidConfigurationException("EnvVar PORT is not set!");
 } else {
@@ -29,7 +30,6 @@ $application->setDeploymentPath('/data/www/'.$envVars['DOMAIN'].'/surf');
 $application->setOption('repositoryUrl', $envVars['REPOSITORY_URL']);
 $application->setOption('composerCommandPath', '/usr/local/bin/composer');
 $application->setOption('keepReleases', 10);
-
 // Use rsync for transfer instead of composer
 $application->setOption('transferMethod', 'rsync');
 $application->setOption('packageMethod', 'git');
@@ -38,6 +38,7 @@ $application->setOption('rsyncFlags', "--recursive --omit-dir-times --no-perms -
 
 
 $workflow = new \TYPO3\Surf\Domain\Model\SimpleWorkflow();
+$workflow->setEnableRollback(FALSE);
 
 // Pull from Gerrit mirror instead of git.typo3.org (temporary fix)
 $workflow->defineTask('sfi.sfi:nogit',
@@ -49,6 +50,7 @@ $workflow->defineTask('sfi.sfi:beard',
         'typo3.surf:localshell',
         array('command' => 'cd {workspacePath} && git config --global user.email "dimaip@gmail.com" &&  git config --global user.name "Dmitri Pisarev (CircleCI)" && ./beard patch')
 );
+// TODO: move this stuff to build.sh
 $workflow->defineTask('sfi.sfi:initialize',
         'typo3.surf:shell',
         array('command' => 'cd {releasePath} && cp Configuration/Production/Settings.yaml Configuration/Settings.yaml && FLOW_CONTEXT=Production ./flow flow:cache:flush --force && chmod g+rwx -R .')
@@ -58,20 +60,21 @@ $workflow->defineTask('sfi.sfi:clearopcache',
         'typo3.surf:shell',
         array('command' => 'cd {currentPath}/Web && echo "<?php opcache_reset();" > cc.php && curl "http://' . $envVars['DOMAIN'] . '/cc.php" && rm cc.php')
 );
+// Simple smoke test
 $smokeTestOptions = array(
         'url' => 'http://next.'.$envVars['DOMAIN'],
         'remote' => TRUE,
         'expectedStatus' => 200,
-        'expectedRegexp' => '/Page--Main/'
+        'expectedRegexp' => '/This website is powered by TYPO3 Neos/'
 );
 $workflow->defineTask('sfi.sfi:smoketest', 'typo3.surf:test:httptest', $smokeTestOptions);
+
 
 $workflow->beforeStage('package', 'sfi.sfi:nogit', $application);
 $workflow->beforeStage('transfer', 'sfi.sfi:beard', $application);
 $workflow->addTask('sfi.sfi:initialize', 'migrate', $application);
-$workflow->afterStage('switch', 'sfi.sfi:clearopcache', $application);
 $workflow->addTask('sfi.sfi:smoketest', 'test', $application);
-$workflow->setEnableRollback(FALSE);
+$workflow->afterStage('switch', 'sfi.sfi:clearopcache', $application);
 
 
 $node = new \TYPO3\Surf\Domain\Model\Node($envVars['DOMAIN']);
