@@ -51,6 +51,7 @@ $workflow->defineTask('sfi.sfi:initialize',
         'typo3.surf:shell',
         array('command' => 'cd {releasePath} && cp Configuration/Production/Settings.yaml Configuration/Settings.yaml && FLOW_CONTEXT=Production ./flow flow:cache:flush --force && chmod g+rwx -R .')
 );
+// Clearing opcode cache. More info here: http://codinghobo.com/opcache-and-symlink-based-deployments/
 $workflow->defineTask('sfi.sfi:clearopcache',
         'typo3.surf:shell',
         array('command' => 'cd {currentPath}/Web && echo "<?php opcache_reset();" > cc.php && curl "http://' . $envVars['DOMAIN'] . '/cc.php" && rm cc.php')
