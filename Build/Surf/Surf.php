@@ -39,10 +39,12 @@ $application->setOption('rsyncFlags', "--recursive --omit-dir-times --no-perms -
 
 $workflow = new \TYPO3\Surf\Domain\Model\SimpleWorkflow();
 
+// Pull from Gerrit mirror instead of git.typo3.org (temporary fix)
 $workflow->defineTask('sfi.sfi:nogit',
         'typo3.surf:localshell',
         array('command' => 'git config --global url."http://git.typo3.org".insteadOf git://git.typo3.org')
 );
+// Apply patches with Beard
 $workflow->defineTask('sfi.sfi:beard',
         'typo3.surf:localshell',
         array('command' => 'cd {workspacePath} && git config --global user.email "dimaip@gmail.com" &&  git config --global user.name "Dmitri Pisarev (CircleCI)" && ./beard patch')
