@@ -51,10 +51,10 @@ $workflow->defineTask('sfi.sfi:beard',
         'typo3.surf:localshell',
         array('command' => 'cd {workspacePath} && git config --global user.email "dimaip@gmail.com" &&  git config --global user.name "Dmitri Pisarev (CircleCI)" && ./beard patch')
 );
-// TODO: move this stuff to build.sh
-$workflow->defineTask('sfi.sfi:initialize',
+// Run build.sh
+$workflow->defineTask('sfi.sfi:buildscript',
         'typo3.surf:shell',
-        array('command' => 'cd {releasePath} && cp Configuration/Production/Settings.yaml Configuration/Settings.yaml && chmod g+rwx -R .')
+        array('command' => 'cd {releasePath} && sh build.sh')
 );
 // Simple smoke test
 $smokeTestOptions = array(
@@ -69,9 +69,9 @@ $workflow->defineTask('sfi.sfi:smoketest', 'typo3.surf:test:httptest', $smokeTes
 $workflow->beforeStage('package', 'sfi.sfi:nogit', $application);
 $workflow->beforeStage('transfer', 'sfi.sfi:beard', $application);
 $workflow->beforeStage('transfer', 'typo3.surf:php:webopcacheresetcreatescript', $application);
-$workflow->addTask('sfi.sfi:initialize', 'migrate', $application);
 $workflow->addTask('sfi.sfi:smoketest', 'test', $application);
 $workflow->afterStage('switch', 'typo3.surf:php:webopcacheresetexecute', $application);
+$workflow->afterStage('switch', 'sfi.sfi:buildscript', $application);
 
 $node = new \TYPO3\Surf\Domain\Model\Node($envVars['DOMAIN']);
 $node->setHostname('server.psmb.ru');
