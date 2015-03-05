@@ -55,11 +55,6 @@ $workflow->defineTask('sfi.sfi:initialize',
         'typo3.surf:shell',
         array('command' => 'cd {releasePath} && cp Configuration/Production/Settings.yaml Configuration/Settings.yaml && chmod g+rwx -R .')
 );
-// Clearing opcode cache. More info here: http://codinghobo.com/opcache-and-symlink-based-deployments/
-$workflow->defineTask('sfi.sfi:clearopcache',
-        'typo3.surf:shell',
-        array('command' => 'cd {currentPath}/Web && echo "<?php opcache_reset(); echo \"cache cleared\";" > cc.php && curl "http://' . $envVars['DOMAIN'] . '/cc.php" && rm cc.php && cd {releasePath} && FLOW_CONTEXT=Production ./flow flow:cache:flush --force && FLOW_CONTEXT=Production ./flow flow:cache:warmup')
-);
 // Simple smoke test
 $smokeTestOptions = array(
         'url' => 'http://next.'.$envVars['DOMAIN'],
@@ -72,10 +67,10 @@ $workflow->defineTask('sfi.sfi:smoketest', 'typo3.surf:test:httptest', $smokeTes
 
 $workflow->beforeStage('package', 'sfi.sfi:nogit', $application);
 $workflow->beforeStage('transfer', 'sfi.sfi:beard', $application);
+$workflow->beforeStage('transfer', 'typo3.surf:php:webopcacheresetcreatescript', $application);
 $workflow->addTask('sfi.sfi:initialize', 'migrate', $application);
 $workflow->addTask('sfi.sfi:smoketest', 'test', $application);
-$workflow->afterStage('switch', 'sfi.sfi:clearopcache', $application);
-
+$workflow->afterStage('switch', 'typo3.surf:php:webopcacheresetexecute', $application);
 
 $node = new \TYPO3\Surf\Domain\Model\Node($envVars['DOMAIN']);
 $node->setHostname('server.psmb.ru');
