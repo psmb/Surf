@@ -54,7 +54,7 @@ $workflow->defineTask('sfi.sfi:beard',
 // Remove resource links since they're absolute symlinks to previous releases (will be generated again automatically)
 $workflow->defineTask('sfi.sfi:unsetResourceLinks',
 	'typo3.surf:shell',
-	array('command' => 'cd {releasePath} && rm -rf Web/_Resources/Persistent/*(N)')
+	array('command' => 'cd {releasePath} && rm -rf Web/_Resources/Persistent/*')
 );
 // Run build.sh
 $workflow->defineTask('sfi.sfi:buildscript',
