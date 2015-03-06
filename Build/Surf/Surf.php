@@ -76,7 +76,7 @@ $workflow->beforeStage('transfer', 'sfi.sfi:beard', $application);
 $workflow->beforeStage('transfer', 'typo3.surf:php:webopcacheresetcreatescript', $application);
 $workflow->addTask('sfi.sfi:smoketest', 'test', $application);
 $workflow->beforeStage('switch', 'sfi.sfi:unsetResourceLinks', $application);
-$workflow->afterStage('switch', 'sfi.sfi:buildscript', $application);
+$workflow->beforeStage('switch', 'sfi.sfi:buildscript', $application);
 $workflow->afterStage('switch', 'typo3.surf:php:webopcacheresetexecute', $application);
 
 
