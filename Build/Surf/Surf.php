@@ -51,6 +51,11 @@ $workflow->defineTask('sfi.sfi:beard',
         'typo3.surf:localshell',
         array('command' => 'cd {workspacePath} && git config --global user.email "dimaip@gmail.com" &&  git config --global user.name "Dmitri Pisarev (CircleCI)" && ./beard patch')
 );
+// Remove resource links since they're absolute symlinks to previous releases (will be generated again automatically)
+$workflow->defineTask('sfi.sfi:unsetResourceLinks',
+	'typo3.surf:shell',
+	array('command' => 'cd {releasePath} && rm -rf Web/_Resources/Persistent/*(N)')
+);
 // Run build.sh
 $workflow->defineTask('sfi.sfi:buildscript',
         'typo3.surf:shell',
@@ -70,6 +75,7 @@ $workflow->beforeStage('package', 'sfi.sfi:nogit', $application);
 $workflow->beforeStage('transfer', 'sfi.sfi:beard', $application);
 $workflow->beforeStage('transfer', 'typo3.surf:php:webopcacheresetcreatescript', $application);
 $workflow->addTask('sfi.sfi:smoketest', 'test', $application);
+$workflow->beforeStage('switch', 'sfi.sfi:unsetResourceLinks', $application);
 $workflow->afterStage('switch', 'sfi.sfi:buildscript', $application);
 $workflow->afterStage('switch', 'typo3.surf:php:webopcacheresetexecute', $application);
 
