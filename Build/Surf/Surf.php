@@ -70,8 +70,9 @@ $workflow->beforeStage('package', 'sfi.sfi:nogit', $application);
 $workflow->beforeStage('transfer', 'sfi.sfi:beard', $application);
 $workflow->beforeStage('transfer', 'typo3.surf:php:webopcacheresetcreatescript', $application);
 $workflow->addTask('sfi.sfi:smoketest', 'test', $application);
-$workflow->afterStage('switch', 'typo3.surf:php:webopcacheresetexecute', $application);
 $workflow->afterStage('switch', 'sfi.sfi:buildscript', $application);
+$workflow->afterStage('switch', 'typo3.surf:php:webopcacheresetexecute', $application);
+
 
 $node = new \TYPO3\Surf\Domain\Model\Node($envVars['DOMAIN']);
 $node->setHostname('server.psmb.ru');
