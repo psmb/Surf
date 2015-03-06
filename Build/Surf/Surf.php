@@ -79,8 +79,9 @@ $workflow->beforeStage('package', 'sfi.sfi:nogit', $application);
 $workflow->beforeStage('transfer', 'sfi.sfi:beard', $application);
 $workflow->addTask('sfi.sfi:smoketest', 'test', $application);
 $workflow->beforeStage('switch', 'sfi.sfi:unsetResourceLinks', $application);
-$workflow->beforeStage('switch', 'sfi.sfi:buildscript', $application);
 $workflow->afterStage('switch', 'sfi.sfi:clearopcache', $application);
+// Caches are cleated in the build script, and that should happen after opcache clear, or images wouldn't get rendered
+$workflow->afterStage('switch', 'sfi.sfi:buildscript', $application);
 
 $node = new \TYPO3\Surf\Domain\Model\Node($envVars['DOMAIN']);
 $node->setHostname('server.psmb.ru');
