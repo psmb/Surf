@@ -51,6 +51,11 @@ $workflow->defineTask('sfi.sfi:beard',
         'typo3.surf:localshell',
         array('command' => 'cd {workspacePath} && git config --global user.email "dimaip@gmail.com" &&  git config --global user.name "Dmitri Pisarev (CircleCI)" && ./beard patch')
 );
+// Publish resources
+$workflow->defineTask('sfi.sfi:publishresources',
+        'typo3.surf:shell',
+        array('command' => 'cd {releasePath} && ./flow resource:publish')
+);
 // Run build.sh
 $workflow->defineTask('sfi.sfi:buildscript',
         'typo3.surf:shell',
@@ -72,6 +77,7 @@ $workflow->defineTask('sfi.sfi:clearopcache',
 
 $workflow->beforeStage('package', 'sfi.sfi:nogit', $application);
 $workflow->beforeStage('transfer', 'sfi.sfi:beard', $application);
+$workflow->beforeStage('test', 'sfi.sfi:publishresources', $application);
 $workflow->addTask('sfi.sfi:smoketest', 'test', $application);
 $workflow->afterStage('switch', 'sfi.sfi:clearopcache', $application);
 // Caches are cleated in the build script, and that should happen after opcache clear, or images wouldn't get rendered
