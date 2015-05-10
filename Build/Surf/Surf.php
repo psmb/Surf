@@ -51,11 +51,6 @@ $workflow->defineTask('sfi.sfi:beard',
         'typo3.surf:localshell',
         array('command' => 'cd {workspacePath} && git config --global user.email "dimaip@gmail.com" &&  git config --global user.name "Dmitri Pisarev (CircleCI)" && ./beard patch')
 );
-// Remove resource links since they're absolute symlinks to previous releases (will be generated again automatically)
-$workflow->defineTask('sfi.sfi:unsetResourceLinks',
-	'typo3.surf:shell',
-	array('command' => 'cd {releasePath} && rm -rf Web/_Resources/Persistent/*')
-);
 // Run build.sh
 $workflow->defineTask('sfi.sfi:buildscript',
         'typo3.surf:shell',
@@ -78,7 +73,6 @@ $workflow->defineTask('sfi.sfi:clearopcache',
 $workflow->beforeStage('package', 'sfi.sfi:nogit', $application);
 $workflow->beforeStage('transfer', 'sfi.sfi:beard', $application);
 $workflow->addTask('sfi.sfi:smoketest', 'test', $application);
-$workflow->beforeStage('switch', 'sfi.sfi:unsetResourceLinks', $application);
 $workflow->afterStage('switch', 'sfi.sfi:clearopcache', $application);
 // Caches are cleated in the build script, and that should happen after opcache clear, or images wouldn't get rendered
 $workflow->afterStage('switch', 'sfi.sfi:buildscript', $application);
