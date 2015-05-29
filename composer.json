@@ -7,7 +7,8 @@
 		"bin-dir": "bin"
 	},
 	"require": {
-		"typo3/surf": "@dev"
+		"typo3/surf": "dev-master",
+		"doctrine/migrations": "@dev"
 	},
 	"scripts": {
 		"post-update-cmd": "TYPO3\\Flow\\Composer\\InstallerScripts::postUpdateAndInstall",
