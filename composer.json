@@ -7,7 +7,6 @@
 		"bin-dir": "bin"
 	},
 	"require": {
-		"doctrine/migrations": "dev-master",
 		"typo3/surf": "@dev"
 	},
 	"scripts": {
