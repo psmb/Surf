@@ -62,7 +62,7 @@ $smokeTestOptions = array(
         'url' => 'http://next.'.$envVars['DOMAIN'],
         'remote' => TRUE,
         'expectedStatus' => 200,
-        'expectedRegexp' => '/This website is powered by TYPO3 Neos/'
+        'expectedRegexp' => '/This website is powered by/'
 );
 $workflow->defineTask('sfi.sfi:smoketest', 'typo3.surf:test:httptest', $smokeTestOptions);
 // Clearing opcode cache. More info here: http://codinghobo.com/opcache-and-symlink-based-deployments/		
