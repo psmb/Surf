@@ -60,7 +60,7 @@ $workflow->defineTask('sfi.sfi:buildscript',
 // Simple smoke test
 $smokeTestOptions = array(
         'url' => 'http://next.'.$envVars['DOMAIN'],
-        'remote' => TRUE,
+        'remote' => FALSE,
         'expectedStatus' => 200,
         'expectedRegexp' => '/This website is powered by/'
 );
