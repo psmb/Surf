@@ -24,7 +24,7 @@ if(getenv("PORT") == "") {
 	$envVars['PORT'] = getenv("PORT");
 }
 
-// Ssh port of docker image
+// Build CSS and JS of Neos. Useful after bearding changes that touch CSS or JS
 $envVars['BUILD_NEOS'] = getenv("BUILD_NEOS");
 
 
