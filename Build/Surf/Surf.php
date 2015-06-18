@@ -24,6 +24,9 @@ if(getenv("PORT") == "") {
 	$envVars['PORT'] = getenv("PORT");
 }
 
+// Ssh port of docker image
+$envVars['BUILD_NEOS'] = getenv("BUILD_NEOS");
+
 
 $application = new \TYPO3\Surf\Application\TYPO3\Flow($envVars['DOMAIN']);
 $application->setVersion('3.0');
@@ -52,6 +55,11 @@ $workflow->defineTask('sfi.sfi:beard',
         'typo3.surf:localshell',
         array('command' => 'cd {workspacePath} && git config --global user.email "dimaip@gmail.com" &&  git config --global user.name "Dmitri Pisarev (CircleCI)" && ./beard patch')
 );
+// Build Neos CSS and JS
+$workflow->defineTask('sfi.sfi:buildneos',
+        'typo3.surf:localshell',
+        array('command' => 'cd {workspacePath}/Packages/Application/TYPO3.Neos/Scripts/ && sh install-dev-tools.sh && npm install -g grunt-cli && grunt build')
+);
 // Run build.sh
 $workflow->defineTask('sfi.sfi:buildscript',
         'typo3.surf:shell',
@@ -74,6 +82,9 @@ $workflow->defineTask('sfi.sfi:clearopcache',
 
 $workflow->beforeStage('package', 'sfi.sfi:nogit', $application);
 $workflow->beforeStage('transfer', 'sfi.sfi:beard', $application);
+if ($envVars['BUILD_NEOS']) {
+	$workflow->beforeStage('transfer', 'sfi.sfi:buildneos', $application);
+}
 $workflow->addTask('sfi.sfi:smoketest', 'test', $application);
 $workflow->afterStage('switch', 'sfi.sfi:clearopcache', $application);
 // Caches are cleated in the build script, and that should happen after opcache clear, or images wouldn't get rendered
