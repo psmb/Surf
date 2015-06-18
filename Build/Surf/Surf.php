@@ -58,7 +58,7 @@ $workflow->defineTask('sfi.sfi:beard',
 // Build Neos CSS and JS
 $workflow->defineTask('sfi.sfi:buildneos',
         'typo3.surf:localshell',
-        array('command' => 'cd {workspacePath}/Packages/Application/TYPO3.Neos/Scripts/ && sh install-dev-tools.sh && npm install -g grunt-cli && grunt build')
+        array('command' => 'cd {workspacePath}/Packages/Application/TYPO3.Neos/Scripts/ && sh install-dev-tools.sh && npm install -g grunt-cli && grunt build && rm -rf node_modules bower_components bundle bin')
 );
 // Run build.sh
 $workflow->defineTask('sfi.sfi:buildscript',
