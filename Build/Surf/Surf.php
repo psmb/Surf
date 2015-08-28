@@ -39,7 +39,7 @@ $application->setOption('transferMethod', 'rsync');
 $application->setOption('packageMethod', 'git');
 $application->setOption('updateMethod', NULL);
 $application->setOption('baseUrl', 'http://' . $envVars['DOMAIN']);
-$application->setOption('rsyncFlags', "--recursive --omit-dir-times --no-perms --links --delete --delete-excluded");
+$application->setOption('rsyncFlags', "--rsync-path=/usr/bin/rsync --recursive --omit-dir-times --no-perms --links --delete --delete-excluded");
 
 
 $workflow = new \TYPO3\Surf\Domain\Model\SimpleWorkflow();
